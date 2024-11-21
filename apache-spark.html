@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de Conteo de Palabras con Apache Spark</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { color: #333; }
+        pre { background: #f4f4f4; padding: 10px; }
+    </style>
+</head>
+<body>
+
+<h1>Proceso de Conteo de Palabras con Apache Spark</h1>
+
+<h2>Descripción</h2>
+<p>Este documento detalla el proceso de conteo de palabras utilizando Apache Spark y Hadoop.</p>
+
+<h2>Pasos Realizados</h2>
+<ol>
+    <li>Se cargó el archivo de texto desde HDFS.</li>
+    <li>Se realizaron filtros para contar las palabras "Recognition" y "Vision".</li>
+    <li>Se guardaron los resultados en un archivo de salida en HDFS.</li>
+</ol>
+
+<h2>Código Utilizado</h2>
+<pre>
+val textoRDD = sc.textFile("hdfs://localhost:9000/user/vboxuser2/entrada/Aplication.txt")
+
+val conteoRecognition = textoRDD.filter(linea => linea.contains("Recognition")).count()
+val conteoVision = textoRDD.filter(linea => linea.contains("Vision")).count()
+
+println(s"Conteo de 'Recognition': $conteoRecognition")
+println(s"Conteo de 'Vision': $conteoVision")
+
+val resultados = sc.parallelize(Seq(
+  s"Conteo de 'Recognition': $conteoRecognition",
+  s"Conteo de 'Vision': $conteoVision"
+))
+
+resultados.saveAsTextFile("hdfs://localhost:9000/user/vboxuser2/salida/resultados.txt")
+</pre>
+
+<h2>Resultados</h2>
+<p>Los resultados del conteo se guardaron en el archivo <strong>resultados.txt</strong> en HDFS.</p>
+
+<h2>Acceso a HDFS</h2>
+<p>Se puede acceder a los archivos en HDFS a través de la interfaz web en <a href="http://localhost:9870">http://localhost:9870</a>.</p>
+
+</body>
+</html>
